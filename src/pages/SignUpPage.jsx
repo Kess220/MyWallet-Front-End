@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-
 export default function SignUpPage() {
   const navigate = useNavigate();
   const [nome, setNome] = useState("");
@@ -36,7 +35,7 @@ export default function SignUpPage() {
     }
 
     try {
-      await axios.post("http://localhost:5000/usuario/cadastro", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/usuario/cadastro`, {
         nome,
         email,
         senha,

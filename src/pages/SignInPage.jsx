@@ -13,7 +13,7 @@ export default function SignInPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}`, {
         email,
         senha,
       });
