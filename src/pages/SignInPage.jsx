@@ -40,18 +40,22 @@ export default function SignInPage() {
         <MyWalletLogo />
         <input
           placeholder="E-mail"
+          data-test="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           placeholder="Senha"
+          data-test="password"
           type="password"
           autoComplete="new-password"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
         />
-        <button type="submit">Entrar</button>
+        <button data-test="sign-in-submit" type="submit">
+          Entrar
+        </button>
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </form>
 

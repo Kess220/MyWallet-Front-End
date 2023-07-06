@@ -56,6 +56,7 @@ export default function SignUpPage() {
       <form onSubmit={handleCadastroSubmit}>
         <input
           placeholder="Nome"
+          data-test="name"
           type="text"
           value={nome}
           onChange={handleNomeChange}
@@ -63,11 +64,13 @@ export default function SignUpPage() {
         <input
           placeholder="E-mail"
           type="email"
+          data-test="email"
           value={email}
           onChange={handleEmailChange}
         />
         <input
           placeholder="Senha"
+          data-test="password"
           type="password"
           autoComplete="new-password"
           value={senha}
@@ -75,12 +78,15 @@ export default function SignUpPage() {
         />
         <input
           placeholder="Confirme a senha"
+          data-test="conf-password"
           type="password"
           autoComplete="new-password"
           value={confirmarSenha}
           onChange={handleConfirmarSenhaChange}
         />
-        <button type="submit">Cadastrar</button>
+        <button data-test="sign-up-submit" type="submit">
+          Cadastrar
+        </button>
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </form>
 
