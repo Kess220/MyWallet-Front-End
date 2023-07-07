@@ -1,12 +1,36 @@
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 import { BiExit } from "react-icons/bi";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+
 export default function HomePage() {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/nome`,
+          {
+            headers: { Authorization: localStorage.getItem("token") },
+          }
+        );
+        const { nome } = response.data;
+        setUserName(nome);
+      } catch (error) {
+        console.error("Erro ao obter o nome do usuário:", error);
+      }
+    };
+
+    fetchUserName();
+  }, []);
   return (
     <HomeContainer>
       <Header>
-        <h1 data-test="user-name">Olá, Fulano</h1>
+        <h1 data-test="user-name">Olá, {userName} </h1>
         <BiExit data-test="logout" />
       </Header>
 
@@ -59,6 +83,7 @@ const HomeContainer = styled.div`
   flex-direction: column;
   height: calc(100vh - 50px);
 `;
+
 const Header = styled.header`
   display: flex;
   align-items: center;
@@ -68,6 +93,7 @@ const Header = styled.header`
   font-size: 26px;
   color: white;
 `;
+
 const TransactionsContainer = styled.article`
   flex-grow: 1;
   background-color: #fff;
@@ -77,15 +103,18 @@ const TransactionsContainer = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   article {
     display: flex;
     justify-content: space-between;
+
     strong {
       font-weight: 700;
       text-transform: uppercase;
     }
   }
 `;
+
 const ButtonsContainer = styled.section`
   margin-top: 15px;
   margin-bottom: 0;
@@ -100,16 +129,19 @@ const ButtonsContainer = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
     p {
       font-size: 18px;
     }
   }
 `;
+
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
   color: ${(props) => (props.color === "positivo" ? "green" : "red")};
 `;
+
 const ListItemContainer = styled.li`
   display: flex;
   justify-content: space-between;
@@ -117,6 +149,7 @@ const ListItemContainer = styled.li`
   margin-bottom: 8px;
   color: #000000;
   margin-right: 10px;
+
   div span {
     color: #c6c6c6;
     margin-right: 10px;
