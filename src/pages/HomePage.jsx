@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { BiExit } from "react-icons/bi";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
-import { useHistory } from "react-router-dom";
 
 export default function HomePage() {
   const history = useHistory();
