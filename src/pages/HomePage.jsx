@@ -1,8 +1,19 @@
 import styled from "styled-components";
 import { BiExit } from "react-icons/bi";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
+import { useHistory } from "react-router-dom";
 
 export default function HomePage() {
+  const history = useHistory();
+
+  const handleNewIncomeClick = () => {
+    history.push("/nova-transacao/entrada");
+  };
+
+  const handleNewExpenseClick = () => {
+    history.push("/nova-transacao/saida");
+  };
+
   return (
     <HomeContainer>
       <Header>
@@ -32,13 +43,13 @@ export default function HomePage() {
       </TransactionsContainer>
 
       <ButtonsContainer>
-        <button data-test="new-income">
+        <button data-test="new-income" onClick={handleNewIncomeClick}>
           <AiOutlinePlusCircle />
           <p>
             Nova <br /> entrada
           </p>
         </button>
-        <button data-test="new-expense">
+        <button data-test="new-expense" onClick={handleNewExpenseClick}>
           <AiOutlineMinusCircle />
           <p>
             Nova <br />
