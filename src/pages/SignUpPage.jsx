@@ -85,7 +85,7 @@ export default function SignUpPage() {
           onChange={handleConfirmarSenhaChange}
         />
         <button data-test="sign-up-submit" type="submit">
-          Cadastrar
+           Cadastrar
         </button>
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </form>
