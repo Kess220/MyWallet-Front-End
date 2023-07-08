@@ -25,6 +25,8 @@ export default function SignInPage() {
       localStorage.setItem("token", token);
       // Redirecionar o usuário para a rota "/home"
       navigate("/home");
+      console.log("Login feito com sucesso!");
+      console.log(token);
     } catch (error) {
       if (error.response && error.response.data) {
         setError(error.response.data.error);
@@ -58,7 +60,6 @@ export default function SignInPage() {
         <button data-test="sign-in-submit" type="submit">
           Entrar
         </button>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
       </form>
 
       <Link to="/cadastro">Primeira vez? Cadastre-se!</Link>

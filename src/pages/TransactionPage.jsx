@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function TransactionsPage() {
   const [valor, setValor] = useState("");
   const [descricao, setDescricao] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
   const handleValorChange = (event) => {
     setValor(event.target.value);
@@ -15,14 +17,96 @@ export default function TransactionsPage() {
     setDescricao(event.target.value);
   };
 
-  const handleEntradaSubmit = (event) => {
+  const handleEntradaSubmit = async (event) => {
     event.preventDefault();
-    // Lógica para adicionar a transação de entrada
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // Token de autenticação não encontrado no localStorage
+        console.error("Token de autenticação não encontrado.");
+        return;
+      }
+
+      const transacao = {
+        valor: parseFloat(valor),
+        descricao,
+      };
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/nova-transacao/entrada`,
+        transacao,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: ` ${token}`,
+          },
+        }
+      );
+
+      const data = response.data;
+
+      if (response.status === 200) {
+        // Transação de entrada adicionada com sucesso
+        console.log(data.mensagem);
+        console.log(data.transacao);
+
+        // Redirecionar para a rota "/home"
+        navigate("/home");
+      } else {
+        console.error(data.error);
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar a transação de entrada:", error);
+      alert(
+        "Ocorreu um erro ao adicionar a transação de entrada. Por favor, verifique os dados e tente novamente."
+      );
+    }
   };
 
-  const handleSaidaSubmit = (event) => {
+  const handleSaidaSubmit = async (event) => {
     event.preventDefault();
-    // Lógica para adicionar a transação de saída
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        // Token de autenticação não encontrado no localStorage
+        console.error("Token de autenticação não encontrado.");
+        return;
+      }
+
+      const transacao = {
+        valor: parseFloat(valor),
+        descricao,
+      };
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/nova-transacao/saida`,
+        transacao,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: ` ${token}`,
+          },
+        }
+      );
+
+      const data = response.data;
+
+      if (response.status === 200) {
+        // Transação de saída adicionada com sucesso
+        console.log(data.mensagem);
+        console.log(data.transacao);
+
+        navigate("/home");
+      } else {
+        console.error(data.error);
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar a transação de saída:", error);
+      alert(
+        "Ocorreu um erro ao adicionar a transação de saída. Por favor, verifique os dados e tente novamente."
+      );
+    }
   };
 
   return (
@@ -73,7 +157,6 @@ export default function TransactionsPage() {
     </TransactionsContainer>
   );
 }
-
 const TransactionsContainer = styled.main`
   height: calc(100vh - 50px);
   display: flex;
