@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 import { BiExit } from "react-icons/bi";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function HomePage() {
   const [userName, setUserName] = useState("");
+  const [transactions, setTransactions] = useState([]);
+  const [balance, setBalance] = useState(0);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -27,30 +37,76 @@ export default function HomePage() {
 
     fetchUserName();
   }, []);
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/transacoes`,
+          {
+            headers: { Authorization: localStorage.getItem("token") },
+          }
+        );
+        const transactionsData = response.data;
+        setTransactions(transactionsData);
+
+        // Calcular o saldo com base nas transações
+        let saldo = 0;
+        transactionsData.forEach((transaction) => {
+          if (transaction.tipo === "entrada") {
+            saldo += transaction.valor;
+          } else if (transaction.tipo === "saida") {
+            saldo -= transaction.valor;
+          }
+        });
+        setBalance(saldo);
+      } catch (error) {
+        console.error("Erro ao obter as transações:", error);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
     <HomeContainer>
       <Header>
         <h1 data-test="user-name">Olá, {userName} </h1>
-        <BiExit data-test="logout" />
+        <BiExit data-test="logout" onClick={handleLogout} />
       </Header>
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong data-test="registry-name">Almoço mãe</strong>
-            </div>
-            <Value data-test="registry-amount" color={"negativo"}>
-              120,00
-            </Value>
-          </ListItemContainer>
+          {transactions.map((transaction) => (
+            <ListItemContainer key={transaction._id}>
+              <div>
+                <span>{transaction.date}</span>
+                <strong data-test="registry-name">
+                  {transaction.descricao}
+                </strong>
+              </div>
+              <Value
+                data-test="registry-amount"
+                color={transaction.tipo === "entrada" ? "positivo" : "negativo"}
+              >
+                {transaction.valor}
+              </Value>
+            </ListItemContainer>
+          ))}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"} data-test="total-amount">
-            2880,00
+          <Value
+            color={balance >= 0 ? "positivo" : "negativo"}
+            data-test="total-amount"
+          >
+            {balance.toFixed(2)}
           </Value>
         </article>
       </TransactionsContainer>
