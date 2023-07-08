@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
 export default function SignUpPage() {
   const navigate = useNavigate();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [error, setError] = useState("");
 
   const handleNomeChange = (event) => {
     setNome(event.target.value);
@@ -30,7 +31,7 @@ export default function SignUpPage() {
     event.preventDefault();
 
     if (senha !== confirmarSenha) {
-      setError("As senhas não coincidem.");
+      alert("As senhas não coincidem.");
       return;
     }
 
@@ -45,12 +46,17 @@ export default function SignUpPage() {
       // Redirecionar o usuário para a página de login
       navigate("/");
     } catch (error) {
-      console.error("Erro ao cadastrar usuário:", error.response.data.error);
-      setError(
-        "Erro ao cadastrar usuário. Verifique os campos e tente novamente."
-      );
+      if (error.response && error.response.status === 409) {
+        alert("Este email já está sendo utilizado.");
+      } else {
+        console.error("Erro ao cadastrar usuário:", error);
+        alert(
+          "Erro ao cadastrar usuário. Verifique os campos e tente novamente."
+        );
+      }
     }
   };
+
   return (
     <SignUpContainer>
       <form onSubmit={handleCadastroSubmit}>
@@ -87,7 +93,6 @@ export default function SignUpPage() {
         <button data-test="sign-up-submit" type="submit">
           Cadastrar
         </button>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
       </form>
 
       <Link to="/">Já tem uma conta? Entre agora!</Link>
@@ -101,14 +106,4 @@ const SignUpContainer = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
-
-const ErrorMessage = styled.p`
-  color: red;
-  margin-top: 10px;
-`;
-
-const Link = styled.a`
-  color: blue;
-  margin-top: 10px;
 `;
