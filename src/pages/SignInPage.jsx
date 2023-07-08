@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MyWalletLogo from "../components/MyWalletLogo";
 import axios from "axios";
 
 export default function SignInPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [error, setError] = useState("");
@@ -23,11 +24,14 @@ export default function SignInPage() {
       // Armazenar o token no localStorage
       localStorage.setItem("token", token);
       // Redirecionar o usuário para a rota "/home"
+      navigate("/home");
     } catch (error) {
       if (error.response && error.response.data) {
         setError(error.response.data.error);
+        console.log(error.response.data.error); // Imprime o erro no console
       } else {
         setError("Erro ao fazer login.");
+        console.log("Erro ao fazer login:", error); // Imprime o erro no console
       }
     }
   };
