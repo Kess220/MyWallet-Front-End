@@ -30,10 +30,10 @@ export default function SignInPage() {
     } catch (error) {
       if (error.response && error.response.data) {
         setError(error.response.data.error);
-        console.log(error.response.data.error); // Imprime o erro no console
+        alert(error.response.data.error); // Exibe o erro em um alerta
       } else {
         setError("Erro ao fazer login.");
-        console.log("Erro ao fazer login:", error); // Imprime o erro no console
+        alert("Erro ao fazer login."); // Exibe uma mensagem genérica de erro em um alerta
       }
     }
   };
@@ -60,6 +60,7 @@ export default function SignInPage() {
         <button data-test="sign-in-submit" type="submit">
           Entrar
         </button>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
       </form>
 
       <Link to="/cadastro">Primeira vez? Cadastre-se!</Link>
