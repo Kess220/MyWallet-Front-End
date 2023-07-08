@@ -18,13 +18,11 @@ export default function SignInPage() {
         senha,
       });
 
-      const { token, redirect } = response.data;
+      const { token } = response.data;
 
       // Armazenar o token no localStorage
       localStorage.setItem("token", token);
-
-      // Redirecionar o usuário para a rota especificada pelo back-end
-      window.location.href = redirect;
+      // Redirecionar o usuário para a rota "/home"
     } catch (error) {
       if (error.response && error.response.data) {
         setError(error.response.data.error);
