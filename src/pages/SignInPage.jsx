@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import MyWalletLogo from "../components/MyWalletLogo";
 import axios from "axios";
-import api from "../api";
 
 export default function SignInPage() {
   const navigate = useNavigate();
@@ -15,7 +14,10 @@ export default function SignInPage() {
     e.preventDefault();
 
     try {
-      const response = await api.post("/login", { email, senha });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}`, {
+        email,
+        senha,
+      });
 
       const { token } = response.data;
 
@@ -28,10 +30,10 @@ export default function SignInPage() {
     } catch (error) {
       if (error.response && error.response.data) {
         setError(error.response.data.error);
-        console.log(error.response.data.error); // Imprime o erro no console
+        alert(error.response.data.error); // Exibe o erro em um alerta
       } else {
         setError("Erro ao fazer login.");
-        console.log("Erro ao fazer login:", error); // Imprime o erro no console
+        alert("Erro ao fazer login."); // Exibe uma mensagem genérica de erro em um alerta
       }
     }
   };
