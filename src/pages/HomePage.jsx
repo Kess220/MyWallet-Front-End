@@ -112,16 +112,15 @@ export default function HomePage() {
       </TransactionsContainer>
 
       <ButtonsContainer>
-        <Link to="/nova-transacao/entrada">
+        <CustomLinkButton to="/nova-transacao/entrada">
           <button data-test="new-income">
             <AiOutlinePlusCircle />
             <p>
               Nova <br /> entrada
             </p>
           </button>
-        </Link>
-
-        <Link to="/nova-transacao/saida">
+        </CustomLinkButton>
+        <CustomLinkButton to="/nova-transacao/saida">
           <button data-test="new-expense">
             <AiOutlineMinusCircle />
             <p>
@@ -129,7 +128,7 @@ export default function HomePage() {
               saída
             </p>
           </button>
-        </Link>
+        </CustomLinkButton>
       </ButtonsContainer>
     </HomeContainer>
   );
@@ -179,7 +178,7 @@ const ButtonsContainer = styled.section`
   gap: 15px;
 
   button {
-    width: 50%;
+    width: 80%;
     height: 115px;
     font-size: 22px;
     text-align: left;
@@ -210,5 +209,19 @@ const ListItemContainer = styled.li`
   div span {
     color: #c6c6c6;
     margin-right: 10px;
+  }
+`;
+const CustomLinkButton = styled(Link)`
+  text-decoration: none;
+  width: 50%;
+  height: 115px;
+  font-size: 22px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  p {
+    font-size: 18px;
   }
 `;
