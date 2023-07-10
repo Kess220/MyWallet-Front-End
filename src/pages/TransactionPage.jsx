@@ -45,7 +45,7 @@ export default function TransactionsPage() {
 
       const data = response.data;
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         // Transação de entrada adicionada com sucesso
         console.log(data.mensagem);
         console.log(data.transacao);
@@ -92,7 +92,7 @@ export default function TransactionsPage() {
 
       const data = response.data;
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         // Transação de saída adicionada com sucesso
         console.log(data.mensagem);
         console.log(data.transacao);
@@ -157,6 +157,7 @@ export default function TransactionsPage() {
     </TransactionsContainer>
   );
 }
+
 const TransactionsContainer = styled.main`
   height: calc(100vh - 50px);
   display: flex;
