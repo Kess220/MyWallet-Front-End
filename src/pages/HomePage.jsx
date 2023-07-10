@@ -47,10 +47,9 @@ export default function HomePage() {
             headers: { Authorization: localStorage.getItem("token") },
           }
         );
-        const transactionsData = response.data || []; // Verifique a estrutura correta da resposta
+        const transactionsData = response.data || [];
         setTransactions(transactionsData);
 
-        // Calcular o saldo com base nas transações
         let saldo = 0;
         transactionsData.forEach((transaction) => {
           if (transaction.tipo === "entrada") {
@@ -86,6 +85,7 @@ export default function HomePage() {
             transactions.map((transaction) => (
               <ListItemContainer key={transaction._id}>
                 <div>
+                  <span>{transaction.date}</span>
                   <strong data-test="registry-name">
                     {transaction.descricao}
                   </strong>
@@ -96,7 +96,8 @@ export default function HomePage() {
                     transaction.tipo === "entrada" ? "positivo" : "negativo"
                   }
                 >
-                  {transaction.valor}
+                  {transaction.valor.toFixed(2)}{" "}
+                  {/* Utilize toFixed(2) para limitar as casas decimais */}
                 </Value>
               </ListItemContainer>
             ))
@@ -111,7 +112,8 @@ export default function HomePage() {
             color={balance >= 0 ? "positivo" : "negativo"}
             data-test="total-amount"
           >
-            {balance.toFixed(2)}
+            {balance.toFixed(2)}{" "}
+            {/* Utilize toFixed(2) para limitar as casas decimais */}
           </Value>
         </article>
       </TransactionsContainer>
