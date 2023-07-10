@@ -47,8 +47,18 @@ export default function HomePage() {
             headers: { Authorization: localStorage.getItem("token") },
           }
         );
-        const { transacoes, saldo } = response.data;
-        setTransactions(transacoes.reverse()); // Inverte a ordem das transações
+        const transactionsData = response.data || []; // Verifique a estrutura correta da resposta
+        setTransactions(transactionsData);
+
+        // Calcular o saldo com base nas transações
+        let saldo = 0;
+        transactionsData.forEach((transaction) => {
+          if (transaction.tipo === "entrada") {
+            saldo += transaction.valor;
+          } else if (transaction.tipo === "saida") {
+            saldo -= transaction.valor;
+          }
+        });
         setBalance(saldo);
       } catch (error) {
         console.error("Erro ao obter as transações:", error);
@@ -72,22 +82,27 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          {transactions.map((transaction) => (
-            <ListItemContainer key={transaction._id}>
-              <div>
-                <span>{transaction.date}</span>
-                <strong data-test="registry-name">
-                  {transaction.descricao}
-                </strong>
-              </div>
-              <Value
-                data-test="registry-amount"
-                color={transaction.tipo === "entrada" ? "positivo" : "negativo"}
-              >
-                {transaction.valorFormatado}
-              </Value>
-            </ListItemContainer>
-          ))}
+          {transactions.length > 0 ? (
+            transactions.map((transaction) => (
+              <ListItemContainer key={transaction._id}>
+                <div>
+                  <strong data-test="registry-name">
+                    {transaction.descricao}
+                  </strong>
+                </div>
+                <Value
+                  data-test="registry-amount"
+                  color={
+                    transaction.tipo === "entrada" ? "positivo" : "negativo"
+                  }
+                >
+                  {transaction.valor}
+                </Value>
+              </ListItemContainer>
+            ))
+          ) : (
+            <p>Nenhuma transação encontrada.</p>
+          )}
         </ul>
 
         <article>
@@ -96,7 +111,7 @@ export default function HomePage() {
             color={balance >= 0 ? "positivo" : "negativo"}
             data-test="total-amount"
           >
-            {balance}
+            {balance.toFixed(2)}
           </Value>
         </article>
       </TransactionsContainer>
@@ -124,6 +139,7 @@ export default function HomePage() {
   );
 }
 
+// Estilos e componentes estilizados
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
