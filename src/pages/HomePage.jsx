@@ -47,18 +47,8 @@ export default function HomePage() {
             headers: { Authorization: localStorage.getItem("token") },
           }
         );
-        const transactionsData = response.data;
-        setTransactions(transactionsData);
-
-        // Calcular o saldo com base nas transações
-        let saldo = 0;
-        transactionsData.forEach((transaction) => {
-          if (transaction.tipo === "entrada") {
-            saldo += transaction.valor;
-          } else if (transaction.tipo === "saida") {
-            saldo -= transaction.valor;
-          }
-        });
+        const { transacoes, saldo } = response.data;
+        setTransactions(transacoes);
         setBalance(saldo);
       } catch (error) {
         console.error("Erro ao obter as transações:", error);
@@ -94,7 +84,7 @@ export default function HomePage() {
                 data-test="registry-amount"
                 color={transaction.tipo === "entrada" ? "positivo" : "negativo"}
               >
-                {transaction.valor}
+                {transaction.valorFormatado}
               </Value>
             </ListItemContainer>
           ))}
@@ -106,7 +96,7 @@ export default function HomePage() {
             color={balance >= 0 ? "positivo" : "negativo"}
             data-test="total-amount"
           >
-            {balance.toFixed(2)}
+            {balance}
           </Value>
         </article>
       </TransactionsContainer>
@@ -211,6 +201,7 @@ const ListItemContainer = styled.li`
     margin-right: 10px;
   }
 `;
+
 const CustomLinkButton = styled(Link)`
   text-decoration: none;
   width: 50%;
