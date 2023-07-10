@@ -48,7 +48,7 @@ export default function HomePage() {
           }
         );
         const { transacoes, saldo } = response.data;
-        setTransactions(transacoes);
+        setTransactions(transacoes.reverse()); // Inverte a ordem das transações
         setBalance(saldo);
       } catch (error) {
         console.error("Erro ao obter as transações:", error);
