@@ -96,10 +96,12 @@ export default function HomePage() {
                   </strong>
                 </div>
                 <Value
-                  color={balance >= 0 ? "positivo" : "negativo"}
-                  data-test="total-amount"
+                  data-test="registry-amount"
+                  color={
+                    transaction.tipo === "entrada" ? "positivo" : "negativo"
+                  }
                 >
-                  {balance}
+                  {transaction.valor}
                 </Value>
               </ListItemContainer>
             ))
