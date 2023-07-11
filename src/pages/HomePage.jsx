@@ -84,6 +84,12 @@ export default function HomePage() {
           {transactions.length > 0 ? (
             transactions.map((transaction) => (
               <ListItemContainer key={transaction._id}>
+                <DateSpan>
+                  {new Date(transaction.date).toLocaleDateString("pt-BR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                  })}
+                </DateSpan>
                 <div>
                   <strong data-test="registry-name">
                     {transaction.descricao}
@@ -103,17 +109,13 @@ export default function HomePage() {
             <p>Nenhuma transação encontrada.</p>
           )}
         </ul>
-
         <article>
           <strong>Saldo</strong>
           <Value
             color={balance >= 0 ? "positivo" : "negativo"}
             data-test="total-amount"
           >
-            {balance.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            })}
+            {balance}
           </Value>
         </article>
       </TransactionsContainer>
@@ -217,6 +219,11 @@ const ListItemContainer = styled.li`
     color: #c6c6c6;
     margin-right: 10px;
   }
+`;
+
+const DateSpan = styled.span`
+  color: #c6c6c6;
+  margin-right: 10px;
 `;
 
 const CustomLinkButton = styled(Link)`
