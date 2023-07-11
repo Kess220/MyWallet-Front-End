@@ -37,12 +37,6 @@ export default function HomePage() {
 
     fetchUserName();
   }, []);
-  function formatValue(value) {
-    return parseFloat(value).toLocaleString("pt-BR", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  }
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -59,12 +53,22 @@ export default function HomePage() {
         let saldo = 0;
         transactionsData.forEach((transaction) => {
           if (transaction.tipo === "entrada") {
-            saldo += parseFloat(transaction.valor);
+            saldo += parseFloat(
+              transaction.valor.replace(/\./g, "").replace(",", ".")
+            );
           } else if (transaction.tipo === "saida") {
-            saldo -= parseFloat(transaction.valor);
+            saldo -= parseFloat(
+              transaction.valor.replace(/\./g, "").replace(",", ".")
+            );
           }
         });
-        setBalance(saldo.toFixed(2));
+
+        const saldoFormatado = saldo.toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+
+        setBalance(saldoFormatado);
       } catch (error) {
         console.error("Erro ao obter as transações:", error);
       }
