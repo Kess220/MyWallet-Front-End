@@ -53,12 +53,12 @@ export default function HomePage() {
         let saldo = 0;
         transactionsData.forEach((transaction) => {
           if (transaction.tipo === "entrada") {
-            saldo += transaction.valor;
+            saldo += parseFloat(transaction.valor);
           } else if (transaction.tipo === "saida") {
-            saldo -= transaction.valor;
+            saldo -= parseFloat(transaction.valor);
           }
         });
-        setBalance(saldo);
+        setBalance(saldo.toFixed(2));
       } catch (error) {
         console.error("Erro ao obter as transações:", error);
       }
@@ -85,7 +85,6 @@ export default function HomePage() {
             transactions.map((transaction) => (
               <ListItemContainer key={transaction._id}>
                 <div>
-                  <span>{transaction.date}</span>
                   <strong data-test="registry-name">
                     {transaction.descricao}
                   </strong>
@@ -96,8 +95,7 @@ export default function HomePage() {
                     transaction.tipo === "entrada" ? "positivo" : "negativo"
                   }
                 >
-                  {transaction.valor.toFixed(2)}{" "}
-                  {/* Utilize toFixed(2) para limitar as casas decimais */}
+                  {transaction.valor}
                 </Value>
               </ListItemContainer>
             ))
@@ -112,8 +110,10 @@ export default function HomePage() {
             color={balance >= 0 ? "positivo" : "negativo"}
             data-test="total-amount"
           >
-            {balance.toFixed(2)}{" "}
-            {/* Utilize toFixed(2) para limitar as casas decimais */}
+            {balance.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
           </Value>
         </article>
       </TransactionsContainer>
@@ -141,7 +141,6 @@ export default function HomePage() {
   );
 }
 
-// Estilos e componentes estilizados
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;

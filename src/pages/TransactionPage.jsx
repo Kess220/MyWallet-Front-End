@@ -75,7 +75,7 @@ export default function TransactionsPage() {
       }
 
       const transacao = {
-        valor: parseFloat(valor),
+        valor: valor ? parseFloat(valor) : 0,
         descricao,
       };
 
