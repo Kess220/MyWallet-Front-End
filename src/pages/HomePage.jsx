@@ -37,6 +37,12 @@ export default function HomePage() {
 
     fetchUserName();
   }, []);
+  function formatValue(value) {
+    return parseFloat(value).toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -115,7 +121,12 @@ export default function HomePage() {
             color={balance >= 0 ? "positivo" : "negativo"}
             data-test="total-amount"
           >
-            {balance}
+            {balance
+              .toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+              .replace(/\./g, "")}
           </Value>
         </article>
       </TransactionsContainer>
