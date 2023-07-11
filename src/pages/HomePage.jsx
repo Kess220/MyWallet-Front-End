@@ -94,17 +94,19 @@ export default function HomePage() {
           {transactions.length > 0 ? (
             transactions.map((transaction) => (
               <ListItemContainer key={transaction._id}>
-                <DateSpan>
-                  {new Date(transaction.date).toLocaleDateString("pt-BR", {
-                    day: "2-digit",
-                    month: "2-digit",
-                  })}
-                </DateSpan>
                 <div>
+                  <DateSpan>
+                    {new Date(transaction.date).toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "2-digit",
+                    })}
+                  </DateSpan>
+
                   <strong data-test="registry-name">
                     {transaction.descricao}
                   </strong>
                 </div>
+
                 <Value
                   data-test="registry-amount"
                   color={
