@@ -185,6 +185,8 @@ const TransactionsContainer = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: auto;
+  flex-grow: 1;
 
   article {
     display: flex;
@@ -195,6 +197,12 @@ const TransactionsContainer = styled.article`
       text-transform: uppercase;
     }
   }
+`;
+const BalanceContainer = styled.div`
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+  padding: 16px;
 `;
 
 const ButtonsContainer = styled.section`
