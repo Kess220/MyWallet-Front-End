@@ -101,7 +101,7 @@ export default function HomePage() {
                     transaction.tipo === "entrada" ? "positivo" : "negativo"
                   }
                 >
-                  {transaction.valor}
+                  {transaction.valor.replace(".", ",")}
                 </Value>
               </ListItemContainer>
             ))
@@ -115,7 +115,7 @@ export default function HomePage() {
             color={balance >= 0 ? "positivo" : "negativo"}
             data-test="total-amount"
           >
-            {balance}
+            {balance.replace(".", ",")}
           </Value>
         </article>
       </TransactionsContainer>
