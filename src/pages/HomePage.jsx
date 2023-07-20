@@ -123,10 +123,7 @@ export default function HomePage() {
         </ul>
         <article>
           <strong>Saldo</strong>
-          <Value
-            color={balance >= 0 ? "positivo" : "negativo"}
-            data-test="total-amount"
-          >
+          <Value balance={parseFloat(balance)} data-test="total-amount">
             {balance
               .toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
@@ -229,7 +226,15 @@ const ButtonsContainer = styled.section`
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
-  color: ${(props) => (props.color === "positivo" ? "green" : "red")};
+  color: ${(props) => {
+    if (props.balance === 0) {
+      return "#c6c6c6";
+    } else if (props.balance >= 0) {
+      return "green";
+    } else {
+      return "red";
+    }
+  }};
 `;
 
 const ListItemContainer = styled.li`
